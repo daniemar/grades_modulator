@@ -2,3 +2,8 @@ streamlit
 pydantic
 pandas
 matplotlib
+seaborn
+ruff
+isort
+pytest
+assertpy

@@ -1,13 +1,14 @@
+import matplotlib.pyplot as plt
 import streamlit as st
+
 from config import current_config
 from grade import new_grade
 from handlers import handlers
 from normalize import normalize
 
+_DEFAULT_PROMPT_ = "Scrivi il risultato e calcolo il voto"
 if "messages" not in st.session_state:
     st.session_state.messages = []
-if "default_prompt" not in st.session_state:
-    st.session_state.default_prompt = "sss"
 if "grades" not in st.session_state:
     st.session_state.grades = []
 
@@ -20,12 +21,16 @@ def reply(prompt) -> str:
     else:
         try:
             result = float(eval(prompt))
-            grade_value = normalize(max_grade=current_config.max_grade, result=result)
-            grade = new_grade(result=result, grade_value=grade_value)
+            grade_value, warning = normalize(
+                max_grade=current_config.max_grade, result=result
+            )
+            grade = new_grade(
+                input=prompt, result=result, grade_value=grade_value, warning=warning
+            )
             st.session_state.grades.append(grade)
 
-            return grade.display_label()
-        except Exception as ex:
+            return grade.markdown_label()
+        except Exception:
             import traceback
 
             traceback.print_exc()
@@ -35,7 +40,7 @@ def reply(prompt) -> str:
 
 st.title("💬 Assistente voti")
 
-if prompt := st.chat_input("What is up?"):
+if prompt := st.chat_input(_DEFAULT_PROMPT_):
     st.session_state.messages.append({"role": "user", "content": prompt})
     response = reply(prompt)
     if response is not None:
@@ -45,8 +50,9 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         content = message["content"]
         if isinstance(content, str):
-            st.markdown(message["content"])
-        import matplotlib.pyplot as plt
-
-        if isinstance(content, plt.Figure):
+            st.markdown(content)
+        elif isinstance(content, list):
+            for item in content:
+              st.markdown(item)
+        elif isinstance(content, plt.Figure):
             st.pyplot(content)
