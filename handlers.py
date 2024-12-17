@@ -91,10 +91,10 @@ def show_grades(_):
 
 
 def show_grades_table(_):
-    output = "| # |Calcolo | Risultato | Voto |\n"
-    output += "|---|--------|-----------|------|\n"
+    output = "| # |Calcolo | Risultato | Voto | Commenti |\n"
+    output += "|---|--------|-----------|------|----------|\n"
     for i, grade in enumerate(st.session_state.grades):
-        output += f"|{i+1}|{grade.input}|{grade.result}|{grade.grade_value}|\n"
+        output += f"|{i+1}|{grade.input}|{grade.result}|{grade.grade_value}|{grade.warning or ''}\n"
     return output
 
 
