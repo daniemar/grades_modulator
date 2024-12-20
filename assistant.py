@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 from config import current_config
+from exporter import export_to_pdf
 from grade import new_grade
 from handlers import handlers
 from normalize import normalize
 
-_DEFAULT_PROMPT_ = "Scrivi il risultato e calcolo il voto"
+_DEFAULT_PROMPT_ = "Scrivi il risultato dei test, io calcolo il voto"
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "grades" not in st.session_state:
@@ -53,6 +54,9 @@ for message in st.session_state.messages:
             st.markdown(content)
         elif isinstance(content, list):
             for item in content:
-              st.markdown(item)
+                st.markdown(item)
         elif isinstance(content, plt.Figure):
             st.pyplot(content)
+
+with st.sidebar:
+    st.button("Pdf report", icon=":material/picture_as_pdf:", on_click=export_to_pdf)

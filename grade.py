@@ -12,7 +12,7 @@ class grade(BaseModel):
     def update(self, grade_value: float, warning: Optional[str] = None):
         self.grade_value = grade_value
         self.warning = warning
-        
+
     def markdown_label(self):
         if self.warning is None:
             return f"**Risultato**: {self.result}, **Voto**: {self.grade_value}"

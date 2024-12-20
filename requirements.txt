@@ -3,6 +3,7 @@ pydantic
 pandas
 matplotlib
 seaborn
+markdown-pdf
 ruff
 isort
 pytest

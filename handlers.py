@@ -4,8 +4,9 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 
+from config import config_to_markdown, current_config, reset_config
+from exporter import export_to_markdown
 from normalize import normalize
-from config import current_config, reset_config
 
 HELP_MD = """
 Help
@@ -31,7 +32,7 @@ def repeat_last(_):
 
 
 def show_config(_):
-    return current_config.model_dump_json()
+    return config_to_markdown()
 
 
 def reset(_):
@@ -91,11 +92,7 @@ def show_grades(_):
 
 
 def show_grades_table(_):
-    output = "| # |Calcolo | Risultato | Voto | Commenti |\n"
-    output += "|---|--------|-----------|------|----------|\n"
-    for i, grade in enumerate(st.session_state.grades):
-        output += f"|{i+1}|{grade.input}|{grade.result}|{grade.grade_value}|{grade.warning or ''}\n"
-    return output
+    return export_to_markdown()
 
 
 handlers = {
